@@ -5,7 +5,7 @@ use BRS\PerformanceDiff\Executor;
 
 class Test {
 	
-	const PROGRESS_CHECKINS = 10;
+	const PROGRESS_CHECKINS = 50;
 	
 	private $name          = '';
 	private $test_callback = NULL;

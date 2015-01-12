@@ -19,7 +19,12 @@ $executor->setPrepCallback(function($executor) {
 	));
 });
 
+$executor->setTareFunction(function($payload) {
+	return rand(0, $payload[0]-1);
+});
+
 $executor->setRerun(10);
+
 
 
 
@@ -38,45 +43,7 @@ $executor->addTest(new Test(
 
 
 
+
 $executor->execute();
 
 $executor->log(basename(__FILE__).'.'.time());
-
-
-/*
-
-$string = 'kjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjgkjhgkhgjgjgkjgjgkjgjhg';
-
-$times = (20 /* chars */ /* 3000000 /* codes *//*);
-
-
-
-
-
-
-
-$time = microtime(TRUE);
-
-for($i = $times; $i > 0; $i--) {
-	$chr = $string[10];
-}
-
-$end = microtime(TRUE);
-
-echo ($end - $time)." seconds total, or ".round((($end - $time) / $times)*1000000, 5)." microseconds per\n";
-
-
-
-
-
-
-
-$time = microtime(TRUE);
-
-for($i = $times; $i > 0; $i--) {
-	$chr = substr($string, 10, 1);
-}
-
-$end = microtime(TRUE);
-
-echo ($end - $time)." seconds total, or ".round((($end - $time) / $times)*1000000, 5)." microseconds per\n";
