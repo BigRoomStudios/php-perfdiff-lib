@@ -5,6 +5,8 @@ use BRS\PerformanceDiff\Executor;
 
 class Test {
 	
+	const PROGRESS_CHECKINS = 10;
+	
 	private $name          = '';
 	private $test_callback = NULL;
 	
@@ -168,10 +170,12 @@ class Test {
 	
 	private function __execWithProgress($callback, $iterations, $payload = NULL) {
 		
-		$iteration_chunk_size      = floor($iterations/100);
-		$iteration_chunk_remainder = $iterations % 100;
 		
-		for($p = 0; $p < 100; $p++) {
+		$checkins = Test::PROGRESS_CHECKINS;
+		$iteration_chunk_size      = floor($iterations/$checkins);
+		$iteration_chunk_remainder = $iterations % $checkins;
+		
+		for($p = 0; $p < $checkins; $p++) {
 			
 			$this->updateProgress($iterations, $iteration_chunk_size * $p);
 			

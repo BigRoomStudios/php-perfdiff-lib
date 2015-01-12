@@ -1,6 +1,6 @@
 <?php
 
-define('PACKAGE_DIR', dirname(dirname(__FILE__)));
+define('PACKAGE_DIR', dirname(__FILE__));
 
 $autoload_path = PACKAGE_DIR.DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 
