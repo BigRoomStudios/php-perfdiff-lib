@@ -3,18 +3,35 @@
 namespace BRS\PerformanceDiff;
 use BRS\PerformanceDiff\Test;
 
+
+define('BRS_PERFDIFF_CLASSES_DIR', dirname(__FILE__));
+define('BRS_PERFDIFF_PACKAGE_DIR', dirname(BRS_PERFDIFF_CLASSES_DIR));
+define('BRS_PERFDIFF_RESULTS_DIR', BRS_PERFDIFF_PACKAGE_DIR.DIRECTORY_SEPARATOR.'results');
+
 class Executor {
 	
 	const TARE     = 1;
 	const PROGRESS = 2;
 	
+	private static $min_it_rerun = 1;
+	private static $max_it_rerun = 10;
+	
+	private static $min_mod_loops = 1;
+	private static $max_mod_loops = 100;
+	
+	/**
+	 * @var unknown DESCRIPTION
+	 * @see setPrepCallback()
+	 * @see execute()
+	 */
+	private $mod_loops        = 1;
+	private $current_mod_loop = 0;
+	
 	private $flags = FALSE;
 	
 	private $name       = '';
 	private $iterations = 0;
-	private $iteration_rerun = 5;
-	private $loops = 1;
-	private $current_mod_loop = 0;
+	private $iteration_rerun = 1;
 	private $current_test_index = NULL;
 	
 	private $payload = NULL;
@@ -22,6 +39,8 @@ class Executor {
 	private $tests = array();
 	
 	private $executing = FALSE;
+	
+	private $log_file = NULL;
 	
 	function __construct($name, $iterations, $flags) {
 		
@@ -31,9 +50,38 @@ class Executor {
 		$this->flags = $flags;
 	}
 	
-	public function setRerun($times = 5) {
+	public function log($file_name) {
+		$results = $this->getResults();
+		
+		if(!empty($results)) {
+			
+			$export = '<?php return '.var_export($this->getResults(),true).';';
+			
+			if(!preg_match('/\.php$/i', $log_file)) {
+				$file_name .= '.php';
+			}
+			
+			$file_name = BRS_PERFDIFF_RESULTS_DIR.DIRECTORY_SEPARATOR.$file_name;
+			
+			if(file_put_contents($file_name, $export)) {
+				return $file_name;
+			}
+		}
+		
+		return FALSE;
+	}
+	
+	public function setRerun($times = 1) {
 		if(!$this->executing) {
-			$this->iteration_rerun = (int) $times;
+			
+			$this->iteration_rerun = max(
+				Executor::$min_it_rerun,
+				min(
+					Executor::$max_it_rerun,
+					(int) $times
+				)
+			);
+			
 			return TRUE;
 		}
 		
@@ -46,14 +94,22 @@ class Executor {
 	
 	public function setPrepCallback($callback, $loops = 1) {
 		if(!$this->executing && is_callable($callback)) {
-			$this->loops = max((int) $loops, 1);
+			
+			$this->mod_loops = max(
+				Executor::$min_mod_loops,
+				min(
+					Executor::$max_mod_loops,
+					(int) $loops
+				)
+			);
+			
 			$this->prep_callback = $callback;
 		}
 		return FALSE;
 	}
 	
 	public function getCurrentModLoop() {
-		return $this->current_mod_loop;
+		return (int) $this->current_mod_loop;
 	}
 	
 	public function getIterations() {
@@ -88,10 +144,7 @@ class Executor {
 		
 		if(!$this->executing) {
 			foreach($this->tests as $test) {
-				$results[] = array(
-					'name' => $test->getName(),
-					'results' => $test->getResults()
-				);
+				$results[] = $test->getResults();
 			}
 		}
 		
@@ -144,7 +197,7 @@ class Executor {
 			
 			try {
 				
-				for($mod_loop = 1; $mod_loop <= $this->loops; $mod_loop++) {
+				for($mod_loop = 1; $mod_loop <= $this->mod_loops; $mod_loop++) {
 				
 					$this->current_mod_loop = $mod_loop;
 					
@@ -179,7 +232,7 @@ class Executor {
 				$return = TRUE;
 			
 			} catch(\Exception $e) {
-				print_r("Performance Tester Execution Exception Caught: ".$e->getMessage()." - Exiting\n");
+				echo "Performance Tester Execution Exception Caught: ".$e->getMessage()." - Ending\n";
 			}
 			
 			$this->executing = FALSE;

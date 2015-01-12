@@ -17,7 +17,34 @@ class Test {
 	}
 	
 	public function getResults($reset = FALSE) {
+		
 		$results = $this->results;
+		
+		foreach($results as $mod_index => $mod_loop) {
+			
+			$best  = NULL;
+			$worst = NULL;
+			
+			foreach($mod_loop['reruns'] as $run_index => $run) {
+				
+				$run_per  = ($run['wall'] / $run['iterations']);
+				
+				if(empty($best) || $best_per > $run_per) {
+					$best = $run_index;
+					$best_per = $run_per;
+				}
+				
+				if(empty($worst) || $worst < $run_per) {
+					$worst = $run_index;
+					$worst_per = $run_per;
+				}
+				
+			}
+			
+			$results[$mod_index]['best']  = $best;
+			$results[$mod_index]['worst'] = $worst;
+		
+		}
 		
 		if(!empty($reset)) {
 			$this->results = array();
@@ -114,7 +141,7 @@ class Test {
 			
 			$this->updateProgress($iterations, $iterations);
 			
-			$results['runs'][] = array(
+			$results['reruns'][] = array(
 				'start' => $start,
 				'stop'  => $stop,
 				'wall'  => ($stop - $start),
