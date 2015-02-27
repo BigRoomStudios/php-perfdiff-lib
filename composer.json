@@ -1,13 +1,13 @@
 {
-    "name": "thebeline/php-perfdiff-lib",
+    "name": "BigRoomStudios/php-perfdiff-lib",
     "description": "A performance benchmarking and differental library.",
 	"type": "library",
     "keywords": ["performance","benchmarking"],
-    "homepage": "https://github.com/thebeline/php-perfdiff-lib",
+    "homepage": "https://github.com/BigRoomStudios/php-perfdiff-lib",
     "license": "MIT",
 	"support": {
-		"issues": "https://github.com/thebeline/php-perfdiff-lib/issues",
-		"source": "https://github.com/thebeline/php-perfdiff-lib/"
+		"issues": "https://github.com/BigRoomStudios/php-perfdiff-lib/issues",
+		"source": "https://github.com/BigRoomStudios/php-perfdiff-lib/"
 	},
     "require": {
         "php": ">=5.3.0"

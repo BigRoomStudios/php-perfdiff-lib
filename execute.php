@@ -25,8 +25,8 @@ if(file_exists($test_file)) {
 	require_once($test_file);
 } elseif(file_exists(PACKAGE_DIR.DIRECTORY_SEPARATOR.$test_file)) {
 	require_once(PACKAGE_DIR.DIRECTORY_SEPARATOR.$test_file);
-} elseif(file_exists(PACKAGE_DIR.DIRECTORY_SEPARATOR.'example_tests'.DIRECTORY_SEPARATOR.$test_file)) {
-	require_once(PACKAGE_DIR.DIRECTORY_SEPARATOR.'example_tests'.DIRECTORY_SEPARATOR.$test_file);
+} elseif(file_exists(PACKAGE_DIR.DIRECTORY_SEPARATOR.'examples'.DIRECTORY_SEPARATOR.$test_file)) {
+	require_once(PACKAGE_DIR.DIRECTORY_SEPARATOR.'examples'.DIRECTORY_SEPARATOR.$test_file);
 } else {
 	die('Unable to load Test File, either relative, absolute, or in the example_test directory.  Please make sure the file exists.');
 }
