@@ -1,5 +1,5 @@
 {
-    "name": "BigRoomStudios/php-perfdiff-lib",
+    "name": "big-room-studios/php-perfdiff-lib",
     "description": "A performance benchmarking and differental library.",
 	"type": "library",
     "keywords": ["performance","benchmarking"],
