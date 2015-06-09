@@ -55,10 +55,10 @@ class Executor {
 		
 		if(!empty($results)) {
 			
-			$export = '<?php return '.var_export($this->getResults(),true).';';
+			$export = json_encode($this->getResults());
 			
 			if(!preg_match('/\.php$/i', $log_file)) {
-				$file_name .= '.php';
+				$file_name .= '.json';
 			}
 			
 			$file_name = BRS_PERFDIFF_RESULTS_DIR.DIRECTORY_SEPARATOR.$file_name;
